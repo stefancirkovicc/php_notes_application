@@ -1,159 +1,54 @@
-# PHP Notes Application (Custom Mini Framework)
+PHP Notes Application
 
-A simple Notes application built on top of a custom PHP micro-framework created from scratch.
+Custom-built PHP notes application powered by a lightweight framework written from scratch.
 
-This project includes:
+This project demonstrates understanding of backend architecture concepts without relying on Laravel or other full-stack frameworks.
 
-- Custom Router
-- Dependency Injection Container
-- Middleware system (auth / guest)
-- Authentication system
-- Session & Flash handling
-- Validation & Exception flow
-- Notes CRUD
-- Composer autoload (PSR-4)
-- Pest testing setup
+Overview
 
-This project demonstrates backend fundamentals without using Laravel or other full frameworks.
+The application includes:
 
----
+Custom Router
 
-#Features
+Dependency Injection Container
 
-#Authentication
-- Register
-- Login
-- Logout
-- Guest middleware
-- Auth middleware
-- Password hashing (bcrypt)
+Middleware system (auth / guest)
 
-#Notes CRUD
-- Create note
-- View all notes
-- View single note
-- Edit note
-- Update note
-- Delete note
-- Authorization check per note
+Authentication (register, login, logout)
 
-#Core Architecture
-- Custom Router
-- Middleware resolver
-- Dependency Injection Container
-- App container static access
-- Custom Database wrapper (PDO)
-- ValidationException with redirect back
-- Session flash data
-- Global helper functions
+Notes CRUD
 
----
+Validation & Exception handling flow
 
-#Project Structure
+Session & Flash messaging
 
-php_notes_application/
-│
-├── Core/
-│ ├── App.php
-│ ├── Authenticator.php
-│ ├── Container.php
-│ ├── Database.php
-│ ├── Response.php
-│ ├── Router.php
-│ ├── Session.php
-│ ├── ValidationException.php
-│ ├── Validator.php
-│ ├── functions.php
-│ └── Middleware/
-│ ├── Middleware.php
-│ ├── Guest.php
-│ └── Authenticated.php
-│
-├── Http/
-│ ├── controllers/
-│ │ ├── notes/
-│ │ ├── registration/
-│ │ └── session/
-│ └── Forms/
-│ └── LoginForm.php
-│
-├── public/
-│ ├── index.php
-│ └── playground.php
-│
-├── views/
-│ ├── notes/
-│ ├── registration/
-│ ├── session/
-│ ├── partials/
-│ ├── 403.php
-│ ├── 404.php
-│ └── index.view.php
-│
-├── tests/
-│ ├── Feature/
-│ ├── Unit/
-│ └── Pest.php
-│
-├── bootstrap.php
-├── config.php
-├── routes.php
-├── composer.json
-└── phpunit.xml
+PSR-4 Composer autoload
 
+Basic Pest test setup
 
----
+The goal of this project was to understand how modern frameworks work internally by implementing core features manually.
 
-#Installation
+Key Features
+Authentication
 
-#Clone the repository
+Secure password hashing (bcrypt)
 
-bash
-git clone https://github.com/your-username/php_notes_application.git
-cd php_notes_application
- Install dependencies
-composer install
-Setup Database
-Create a MySQL database:
+Session-based login
 
-myapp
-Update config.php if needed:
+Guest & Auth middleware protection
 
-return [
-    'database' => [
-        'host' => 'localhost',
-        'port' => 3306,
-        'dbname' => 'myapp',
-        'charset' => 'utf8mb4'
-    ]
-];
-Create tables
-Example schema:
+Notes Management
 
-CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
-);
+Create, edit, update and delete notes
 
-CREATE TABLE notes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    body TEXT NOT NULL,
-    user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-Run the application
-Point your server root to the public/ folder.
+Authorization check per note
 
-Or run with PHP built-in server:
+Clean separation between controllers and views
 
-php -S localhost:8000 -t public
-Then open:
+Architecture
+Routing
 
-http://localhost:8000
-Architecture Overview
-Router
-Handles:
+Custom Router supporting:
 
 GET
 
@@ -163,89 +58,75 @@ PATCH
 
 DELETE
 
-Middleware per route
+Per-route middleware
 
-Routes are defined in:
-
-routes.php
-Dependency Injection Container
-The app uses a custom container:
-
-App::resolve(Database::class);
-Bindings are defined in:
-
-bootstrap.php
-Middleware System
-Middleware is mapped via:
-
-Middleware::MAP = [
-    'guest' => Guest::class,
-    'auth' => Authenticated::class
-];
-Routes can use:
-
-$router->get('/notes', 'notes/index.php')->only('auth');
-Validation Flow
-Validation can throw:
-
-ValidationException::throw($errors, $old);
-Which is caught in:
-
-public/index.php
-And redirects back with flash session data.
-
-Session & Flash
-Custom flash system:
-
-Session::flash('errors', $errors);
-Session::unflash();
-Testing
-This project includes Pest configuration.
-
-Run tests:
-
-vendor/bin/pest
-What This Project Demonstrates
-Understanding of HTTP routing
-
-Middleware patterns
-
-Authentication flow
+Routes are defined in routes.php.
 
 Dependency Injection
 
-Custom framework architecture
+A simple service container handles dependency resolution:
 
-Exception-driven validation
+App::resolve(Database::class);
 
-Secure password handling
 
-PDO usage
+Bindings are configured in bootstrap.php.
 
-Clean project structure
+Middleware
+
+Middleware resolution is handled dynamically:
+
+$router->get('/notes', 'notes/index.php')->only('auth');
+
+
+Supported middleware:
+
+auth
+
+guest
+
+Validation & Error Handling
+
+Validation failures throw a custom ValidationException which is caught in the front controller and redirects back with flash session data.
 
 Tech Stack
-PHP
 
-MySQL
+PHP (OOP)
 
-Composer
+MySQL (PDO)
 
-Pest
+Composer (PSR-4)
 
-PHPUnit
+Pest (testing setup)
 
 TailwindCSS (CDN)
 
-Future Improvements
-Proper user-based note filtering (currently hardcoded user_id)
+Running Locally
 
-CSRF protection
+Install dependencies:
 
-API version
+composer install
 
-JSON responses
 
-Better folder separation (Controllers vs Handlers)
+Run with built-in PHP server:
 
-Proper migration system
+php -S localhost:8000 -t public
+
+Purpose of the Project
+
+This project was built to deepen understanding of:
+
+Routing mechanisms
+
+Middleware pipelines
+
+Dependency injection
+
+Session management
+
+Authentication flow
+
+Clean backend structure
+
+Author
+
+Stefan Cirkovic
